@@ -125,7 +125,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Django / Projeto
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LOGIN_URL = "login"
+# Redirecionamentos pós login/logout
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # expira ao fechar o navegador
 
 # DRF + Spectacular

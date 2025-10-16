@@ -16,6 +16,15 @@
 </script>
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<style>
+#erp-toast-box{position:fixed;left:16px;bottom:16px;z-index:3000;max-width:380px}
+.erp-toast{display:none;margin-top:8px;padding:12px 14px;border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.2);color:#0f5132;background:#e6f4ea}
+.erp-warn{color:#664d03;background:#fff3cd}
+.erp-alert{color:#842029;background:#f8d7da}
+.erp-toast.show{display:block;animation:erp_fadein .2s ease-out}
+@keyframes erp_fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -74,5 +83,92 @@
 {% load static %}
 <script src="{% static 'js/form-required.js' %}"></script>
 <script src="{% static 'js/money-br.js' %}"></script>
+<div id="erp-toast-box" aria-live="polite" aria-atomic="true"></div>
+<script>
+(function(){
+  if (!window.ERP_USERLABEL) return;
+  const box = document.getElementById('erp-toast-box');
+  const DURATION = 10000; // 10s absolute from server send time
+
+  function renderToast(pkt, remainingMs){
+    const el = document.createElement('div');
+    el.className = 'erp-toast ' + (pkt.level==='alert'?'erp-alert':(pkt.level==='warn'?'erp-warn':''));
+    el.innerHTML = '<strong>' + (pkt.level==='alert'?'Atenção':(pkt.level==='warn'?'Cuidado':'Informação')) + ':</strong> ' + (pkt.message||'').replace(/</g,'&lt;');
+    box.appendChild(el);
+    setTimeout(()=>{ el.classList.add('show'); }, 10);
+    const ms = Math.max(0, remainingMs);
+    setTimeout(()=>{
+      el.remove();
+      try { localStorage.setItem('erp_seen_broadcast_id', String(pkt.id)); } catch(e){}
+      try { localStorage.removeItem('erp_active_toast'); } catch(e){}
+    }, ms);
+  }
+
+  function restoreActiveToast(){
+    try {
+      const raw = localStorage.getItem('erp_active_toast');
+      if (!raw) return false;
+      const t = JSON.parse(raw);
+      const remaining = (t.expires_at_ms || 0) - Date.now();
+      if (remaining > 50) {
+        renderToast(t, remaining);
+        return true;
+      } else {
+        localStorage.removeItem('erp_active_toast');
+        if (t.id) localStorage.setItem('erp_seen_broadcast_id', String(t.id));
+      }
+    } catch(e){}
+    return false;
+  }
+
+  // Restore if an active toast exists (cross-page persistence)
+  restoreActiveToast();
+
+  // Build since_id using max of fully seen and ack
+  let seenId = 0, ackId = 0;
+  try { seenId = parseInt(localStorage.getItem('erp_seen_broadcast_id')||'0',10) || 0; } catch(e){}
+  try { ackId  = parseInt(localStorage.getItem('erp_ack_broadcast_id') ||'0',10) || 0; } catch(e){}
+  let sinceId = Math.max(seenId, ackId);
+
+  async function poll(){
+    try{
+      const r = await fetch('/notifications/poll?since_id='+sinceId, {headers:{'X-Requested-With':'fetch'}});
+      if(!r.ok) return;
+      const data = await r.json();
+      if(data && data.has && data.toast){
+        const t = data.toast;
+        const remaining = (typeof t.expires_in_ms === 'number') ? t.expires_in_ms : DURATION;
+        if (remaining <= 0) {
+          // already expired on server; mark seen/ack and skip
+          try { localStorage.setItem('erp_seen_broadcast_id', String(t.id)); } catch(e){}
+          try { localStorage.setItem('erp_ack_broadcast_id', String(t.id)); } catch(e){}
+          sinceId = Math.max(sinceId, t.id);
+          return;
+        }
+        // Avoid duplicating if an active toast with same id exists
+        try {
+          const raw = localStorage.getItem('erp_active_toast');
+          if (raw){
+            const cur = JSON.parse(raw);
+            if (cur && cur.id === t.id) return;
+          }
+        } catch(e){}
+        // ACK immediately to prevent re-fetch on reloads
+        try { localStorage.setItem('erp_ack_broadcast_id', String(t.id)); } catch(e){}
+        sinceId = Math.max(sinceId, t.id);
+        // Persist an active toast with absolute expiry from server
+        const expiresAtMs = Date.now() + remaining;
+        const pkt = {id:t.id, message:t.message, level:t.level, expires_at_ms: expiresAtMs};
+        try { localStorage.setItem('erp_active_toast', JSON.stringify(pkt)); } catch(e){}
+        renderToast(pkt, remaining);
+      }
+    }catch(e){}
+  }
+
+  setInterval(poll, 3000);
+  poll();
+})();
+</script>
+
 </body>
 </html>
