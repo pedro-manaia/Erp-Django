@@ -1,0 +1,44 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<h2>Dispositivos Ativos</h2>
+
+{% if active_list %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:24px;">
+    {% for d in active_list %}
+      <div style="background:#12313a;border-radius:8px;padding:12px;color:#e7f2f5;">
+        <div style="font-weight:600;margin-bottom:4px;">{{ d.username }}</div>
+        <div>IP: <code>{{ d.ip }}</code></div>
+        <div>Dispositivo: {{ d.device }}</div>
+        <div title="{{ d.user_agent|default:'-' }}">UA: {{ d.user_agent|truncatechars:48 }}</div>
+        <div style="font-size:12px;opacity:.8;">Visto há {{ d.last_seen_secs }}s</div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Nenhum dispositivo ativo nos últimos 2 minutos.</p>
+{% endif %}
+
+<h3>Últimos logins de hoje{% if today_date %} ({{ today_date }}){% endif %}</h3>
+<table class="table" style="width:100%;border-collapse:collapse;">
+  <thead>
+    <tr>
+      <th style="text-align:left;">Hora</th>
+      <th style="text-align:left;">Usuário</th>
+      <th style="text-align:left;">IP</th>
+      <th style="text-align:left;">User-Agent</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for e in today_logins %}
+    <tr>
+      <td>{{ e.ts }}</td>
+      <td>{{ e.username }}</td>
+      <td><code>{{ e.ip }}</code></td>
+      <td title="{{ e.user_agent|default:'-' }}">{{ e.user_agent|truncatechars:64 }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="4">Sem logins hoje.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

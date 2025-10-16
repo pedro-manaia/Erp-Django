@@ -1,0 +1,29 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">{{ object|default:'Novo cliente' }}</h4>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="row g-3">
+      <div class="col-md-2">{{ form.tipo.label_tag }}{{ form.tipo }}</div>
+      <div class="col-md-5">{{ form.nome.label_tag }}{{ form.nome }}</div>
+      <div class="col-md-5">{{ form.razao_social.label_tag }}{{ form.razao_social }}</div>
+      <div class="col-md-4">{{ form.cpf_cnpj.label_tag }}{{ form.cpf_cnpj }}</div>
+      <div class="col-md-4">{{ form.email.label_tag }}{{ form.email }}</div>
+      <div class="col-md-4">{{ form.data_nascimento.label_tag }}{{ form.data_nascimento }}</div>
+      <div class="col-md-4">{{ form.telefone.label_tag }}{{ form.telefone }}</div>
+      <div class="col-md-4">{{ form.whatsapp.label_tag }}{{ form.whatsapp }}</div>
+      <div class="col-md-4 form-check form-switch mt-4">{{ form.ativo }} {{ form.ativo.label_tag }}</div>
+      <div class="col-md-6">{{ form.endereco.label_tag }}{{ form.endereco }}</div>
+      <div class="col-md-3">{{ form.cidade.label_tag }}{{ form.cidade }}</div>
+      <div class="col-md-1">{{ form.uf.label_tag }}{{ form.uf }}</div>
+      <div class="col-md-2">{{ form.cep.label_tag }}{{ form.cep }}</div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-outline-secondary" href="{% url 'sales:customers' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

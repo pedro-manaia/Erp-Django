@@ -1,0 +1,44 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="m-0">Orçamento #{{ object.id }}</h4>
+  <div class="d-flex gap-2">
+    {% if object.status != 'approved' %}
+    <form method="post" action="{% url 'sales:quote_approve' object.pk %}" onsubmit="return confirm('Aprovar e virar pedido?');">
+      {% csrf_token %}
+      <button class="btn btn-success">Aprovar → Pedido</button>
+    </form>
+    {% else %}
+    <a class="btn btn-outline-success" href="{% url 'sales:order_detail' object.pedido.pk %}">Ver Pedido</a>
+    {% endif %}
+    <a class="btn btn-outline-secondary" href="{% url 'sales:quote_edit' object.pk %}">Editar</a>
+  </div>
+</div>
+<div class="bg-white rounded shadow-sm p-3 mb-3">
+  <div><strong>Cliente:</strong> {{ object.cliente }}</div>
+  <div><strong>Status:</strong> {{ object.get_status_display }}</div>
+  <div><strong>Validade:</strong> {{ object.validade|default:'—' }}</div>
+  <div><strong>Observações:</strong> {{ object.observacoes|linebreaksbr }}</div>
+</div>
+<div class="bg-white rounded shadow-sm p-3">
+  <table class="table table-sm">
+    <thead><tr><th>Produto</th><th>Descrição</th><th>Qtd</th><th>Preço</th><th>Subtotal</th></tr></thead>
+    <tbody>
+      {% for i in object.itens.all %}
+      <tr>
+        <td>{{ i.produto|default:'—' }}</td>
+        <td>{{ i.descricao }}</td>
+        <td>{{ i.quantidade }}</td>
+        <td>R$ {{ i.preco_unitario }}</td>
+        <td>R$ {{ i.subtotal }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">Sem itens</td></tr>
+      {% endfor %}
+      <tr><td colspan="4" class="text-end"><strong>Total bruto:</strong></td><td><strong>R$ {{ object.total_bruto }}</strong></td></tr>
+      <tr><td colspan="4" class="text-end"><strong>Desconto:</strong></td><td><strong>R$ {{ object.desconto_total }}</strong></td></tr>
+      <tr><td colspan="4" class="text-end"><strong>Total líquido:</strong></td><td><strong>R$ {{ object.total_liquido }}</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

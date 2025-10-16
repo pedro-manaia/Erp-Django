@@ -1,0 +1,12 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Estoque</h4>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{% url 'inventory:products:list' %}">Produtos</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'inventory:entries' %}">Entradas</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'inventory:adjust' %}">Correção de Estoque</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'inventory:cadastro' %}">Cadastro</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  {% if object %}
+  <h4 class="mb-3">Editar usuário: {{ object.username }}</h4>
+  {% else %}
+  <h4 class="mb-3">Novo usuário</h4>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Usuário</label>
+        {{ form.username }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">E-mail</label>
+        {{ form.email }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Ativo?</label><br>
+        <div class="form-check form-switch">
+          {{ form.is_active }} <label class="form-check-label">Pode acessar o sistema</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Nome: *</label>
+        {{ form.first_name }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Sobrenome</label>
+        {{ form.last_name }}
+      </div>
+
+      {% if form.password1 %}
+      <div class="col-md-4">
+        <label class="form-label">Senha</label>
+        {{ form.password1 }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Confirme a senha</label>
+        {{ form.password2 }}
+      </div>
+      {% endif %}
+
+      <div class="col-12">
+        <label class="form-label">Módulos liberados</label>
+        <ul class="list-group">
+          {{ form.modules }}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-outline-secondary" href="{% url 'config_users' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

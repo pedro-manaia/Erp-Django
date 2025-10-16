@@ -1,0 +1,16 @@
+# 1) Habilite os apps (use as AppConfigs para evitar conflito de nomes):
+INSTALLED_APPS += [
+    'products.apps.ProductsConfig',
+    'inventory.apps.InventoryConfig',
+]
+
+# 2) Rode SEM migrations para estes apps (usa --run-syncdb):
+MIGRATION_MODULES = {
+    'customers': None,
+    'products': None,
+    'sales': None,
+    'inventory': None,
+}
+
+# 3) (Opcional) Acesso pela rede local:
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.3.1.104']

@@ -1,0 +1,17 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Registrar baixa</h4>
+  <form method="post">{% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-4">{{ form.data_pagto.label_tag }} {{ form.data_pagto }}</div>
+      <div class="col-md-4">{{ form.conta_id.label_tag }} {{ form.conta_id }}</div>
+      <div class="col-md-4">{{ form.meio_pagamento.label_tag }} {{ form.meio_pagamento }}</div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary">Salvar</button>
+      <a class="btn btn-secondary" href="{% url 'finance:home' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">{{ titulo }}</h4>
+  <form method="post">{% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-3">{{ form.parcelas.label_tag }} {{ form.parcelas }}</div>
+      <div class="col-md-3">{{ form.primeiro_vencimento.label_tag }} {{ form.primeiro_vencimento }}</div>
+      <div class="col-md-3">{{ form.intervalo_dias.label_tag }} {{ form.intervalo_dias }}</div>
+      <div class="col-md-3">{{ form.fornecedor_nome.label_tag }} {{ form.fornecedor_nome }}</div>
+      <div class="col-md-3">{{ form.categoria.label_tag }} {{ form.categoria }}</div>
+      <div class="col-md-3"></div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary">Gerar</button>
+      <a class="btn btn-secondary" href="{% url 'finance:home' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

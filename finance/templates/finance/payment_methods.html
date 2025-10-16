@@ -1,0 +1,30 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Formas de Pagamento</h4>
+  <form method="post" class="mb-3">{% csrf_token %}
+    <div class="row g-2 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label">Nome: *</label>
+        <input name="nome" type="text" class="form-control" placeholder="Ex.: Pix Loja, Crédito Loja, Boleto" required/>
+      </div>
+      <div class="col-md-3 text-end">
+        <button class="btn btn-primary w-100">Criar forma</button>
+      </div>
+    </div>
+  </form>
+
+  <table class="table table-sm align-middle">
+    <thead><tr><th>#</th><th>Forma</th></tr></thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td>{{ it.id }}</td>
+        <td>{{ it.nome }}</td></tr>
+      {% empty %}
+      <tr><td colspan="3" class="text-center text-muted">Nenhuma forma cadastrada.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

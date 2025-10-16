@@ -1,0 +1,36 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+{% if need_migration %}
+  <div class="alert alert-warning">
+    O banco ainda não possui a tabela de <strong>Categoria de Despesa</strong>.
+    Você pode apagar o <em>db.sqlite3</em> (ou rodar <code>makemigrations</code> e <code>migrate</code>) e recarregar a página.
+  </div>
+{% endif %}
+
+  <h4 class="mb-3">Categorias de Despesa</h4>
+  <p class="text-muted">Cadastre categorias e subcategorias para usar no Contas a Pagar.</p>
+  <div class="mb-3">
+    <a class="btn btn-primary btn-sm" href="{% url 'finance:expense_category_new' %}">Nova Categoria</a>
+  </div>
+  {% if top_categories %}
+    <ul class="list-group">
+      {% for cat in top_categories %}
+        <li class="list-group-item">
+          <strong>{{ cat.name }}</strong>
+          <a class="btn btn-outline-secondary btn-sm float-end" href="{% url 'finance:expense_category_new' %}?parent={{ cat.id }}">Nova Subcategoria</a>
+          {% if cat.children.all %}
+            <ul class="mt-2">
+              {% for sub in cat.children.all %}
+              <li>{{ sub.name }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-info">Nenhuma categoria cadastrada ainda.</div>
+  {% endif %}
+</div>
+{% endblock %}

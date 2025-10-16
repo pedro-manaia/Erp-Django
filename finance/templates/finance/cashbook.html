@@ -1,0 +1,53 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Extrato / Caixa</h4>
+  <form class="row g-2 mb-3">
+    <div class="col-md-4">
+      <label class="form-label">Conta</label>
+      <select name="account_id" class="form-select">
+        <option value="">(todas)</option>
+        {% for a in accounts %}
+          <option value="{{ a.id }}" {% if selected == a.id %}selected{% endif %}>{{ a.nome }} ({{ a.tipo }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">De</label>
+      <input type="date" class="form-control" name="start" value="{{ start }}"/>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Até</label>
+      <input type="date" class="form-control" name="end" value="{{ end }}"/>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+  </form>
+
+  {% if balances %}
+  <div class="alert alert-secondary">
+    <strong>Entradas:</strong> R$ {{ balances.in|floatformat:2 }} &nbsp; | &nbsp;
+    <strong>Saídas:</strong> R$ {{ balances.out|floatformat:2 }} &nbsp; | &nbsp;
+    <strong>Saldo:</strong> R$ {{ balances.balance|floatformat:2 }}
+  </div>
+  {% endif %}
+
+  <table class="table table-sm table-striped align-middle">
+    <thead><tr><th>Data</th><th>Conta</th><th>Tipo</th><th>Descrição</th><th class="text-end">Valor</th></tr></thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.date }}</td>
+        <td>{{ r.account_id }}</td>
+        <td>{% if r.type == 'in' %}<span class="badge text-bg-success">Entrada</span>{% else %}<span class="badge text-bg-danger">Saída</span>{% endif %}</td>
+        <td>{{ r.description }}</td>
+        <td class="text-end">R$ {{ r.amount }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">Sem movimentos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

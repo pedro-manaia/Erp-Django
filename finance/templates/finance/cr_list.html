@@ -1,0 +1,7 @@
+{% extends "finance/_list_common.html" %}
+{% block title %}Contas a Receber{% endblock %}
+
+
+{% block actions %}
+  <a class="btn btn-primary" href="{% url 'finance:new_doc' %}?tipo=CR">Novo CR</a>
+{% endblock %}

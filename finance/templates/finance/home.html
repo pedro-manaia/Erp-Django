@@ -1,0 +1,112 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Financeiro</h4>
+  <div class="row g-3">
+  <div class="col-md-3">
+    <div class="card h-100">
+      <div class="card-header">Listas</div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:cr_list' %}">Contas a Receber</a>
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:cp_list' %}">Contas a Pagar</a>
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:cashbook' %}">Extrato (Cashbook)</a>
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:accounts' %}">Contas Bancárias</a>
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:expense_category_list' %}">Categorias de Despesa</a>
+        <a class="list-group-item list-group-item-action" href="{% url 'finance:revenue_category_list' %}">Categorias de Receita</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-header">Ações rápidas</div>
+        <div class="card-body">
+          <form method="post" action="{% url 'finance:quick_cr' %}" class="mb-3">{% csrf_token %}
+            <div class="row g-2 align-items-end">
+              <div class="col-5">
+                <label class="form-label">Pedido #</label>
+                <input name="pedido_id" type="number" class="form-control" required/>
+              </div>
+              <div class="col-2">
+                <label class="form-label">Parc.</label>
+                <input name="parcelas" type="number" class="form-control" value="1" min="1"/>
+              </div>
+              <div class="col-5">
+                <label class="form-label">1º venc.</label>
+                <input name="primeiro_vencimento" type="date" class="form-control" value="{{ today }}"/>
+              </div>
+              <div class="col-7">
+                <label class="form-label">Intervalo (dias)</label>
+                <input name="intervalo_dias" type="number" class="form-control" value="30" min="1"/>
+              </div>
+              <div class="col-12">
+                {{ cr_form.categoria.label_tag }} {{ cr_form.categoria }}
+              </div>
+              <div class="col-5">
+                <button class="btn btn-success w-100">Gerar CR</button>
+              </div>
+            </div>
+          </form>
+
+          <form method="post" action="{% url 'finance:quick_cp' %}">{% csrf_token %}
+            <div class="row g-2 align-items-end">
+              <div class="col-5">
+                <label class="form-label">Entrada #</label>
+                <input name="entrada_id" type="number" class="form-control" required/>
+              </div>
+              <div class="col-2">
+                <label class="form-label">Parc.</label>
+                <input name="parcelas" type="number" class="form-control" value="1" min="1"/>
+              </div>
+              <div class="col-5">
+                <label class="form-label">1º venc.</label>
+                <input name="primeiro_vencimento" type="date" class="form-control" value="{{ today }}"/>
+              </div>
+              <div class="col-7">
+                <label class="form-label">Intervalo (dias)</label>
+                <input name="intervalo_dias" type="number" class="form-control" value="30" min="1"/>
+              </div>
+              <div class="col-12">
+                {{ cp_form.categoria.label_tag }} {{ cp_form.categoria }}
+              </div>
+              <div class="col-5">
+                <button class="btn btn-danger w-100">Gerar CP</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header">Saldos por conta</div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead><tr><th>Conta</th><th class="text-end">Entradas</th><th class="text-end">Saídas</th><th class="text-end">Saldo</th></tr></thead>
+            <tbody>
+              {% for acc, b in balances %}
+              <tr>
+                <td>{{ acc.nome }} <small class="text-muted">({{ acc.tipo }})</small></td>
+                <td class="text-end">R$ {{ b.in|floatformat:2 }}</td>
+                <td class="text-end">R$ {{ b.out|floatformat:2 }}</td>
+                <td class="text-end"><strong>R$ {{ b.balance|floatformat:2 }}</strong></td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="4" class="text-center text-muted">Nenhuma conta.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary" href="{% url 'finance:cashbook' %}">Ver extrato</a>
+            <a class="btn btn-outline-primary" href="{% url 'finance:accounts' %}">Gerenciar contas</a>
+            <a class="btn btn-primary ms-auto" href="{% url 'finance:new_doc' %}">Novo documento</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Editar {{ obj.get_tipo_display }} #{{ obj.id }}</h4>
+  <form method="post">{% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-6">{{ form.descricao.label_tag }} {{ form.descricao }}</div>
+      <div class="col-md-3">{{ form.valor.label_tag }} {{ form.valor }}</div>
+      <div class="col-md-3">{{ form.vencimento.label_tag }} {{ form.vencimento }}</div>
+      <div class="col-md-6">{{ form.categoria.label_tag }} {{ form.categoria }}</div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary">Salvar</button>
+      <a class="btn btn-secondary" href="{% url 'finance:cr_list' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

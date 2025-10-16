@@ -1,0 +1,19 @@
+--- a/erp_diverth_festas/finance/templates/finance/_list_common.html
++++ b/erp_diverth_festas/finance/templates/finance/_list_common.html
+@@ -20,7 +20,15 @@
+         <td>{{ l.descricao }}</td>
+         <td>{{ l.vencimento }}</td>
+         <td class="text-end">R$ {{ l.valor }}</td>
+-        <td>{% if l.pago_em %}<span class="badge text-bg-success">Pago</span>{% else %}<span class="badge text-bg-warning">Em aberto</span>{% endif %}</td>
++        <td>
++  {% if l.status_dyn == "paid" %}
++    <span class="badge text-bg-success">Pago</span>
++  {% elif l.status_dyn == "overdue" %}
++    <span class="badge text-bg-danger">Em atraso</span>
++  {% else %}
++    <span class="badge text-bg-warning">Em aberto</span>
++  {% endif %}
++</td>
+         <td>
+           {% if not l.pago_em %}
+             <a class="btn btn-sm btn-outline-primary" href="{% url 'finance:baixa_parcela_form' l.id %}">Baixar</a>

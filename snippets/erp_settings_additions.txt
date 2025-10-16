@@ -1,0 +1,9 @@
+# ==== [ADDED] Disable migrations for core apps (use syncdb on migrate) ====
+MIGRATION_MODULES = {
+    'customers': None,
+    'products': None,
+    'sales': None,
+}
+
+# (Opcional) Hosts de rede local, se quiser acessar de outra máquina:
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.3.1.104']  # ajuste o IP

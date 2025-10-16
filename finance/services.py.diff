@@ -1,0 +1,10 @@
+--- a/erp_diverth_festas/finance/services.py
++++ b/erp_diverth_festas/finance/services.py
+@@ -7,6 +7,7 @@
+ from typing import Iterable, List, Optional, Dict
+ 
+ from django.db import transaction
++from django.db.models import Case, When, Value, CharField, BooleanField
+ from django.utils import timezone
+ 
+ from .models import FinanceDocument, LedgerEntry, ExpenseCategory, Customer

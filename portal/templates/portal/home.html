@@ -1,0 +1,78 @@
+{% extends "portal/base.html" %}
+{% load portal_tags %}
+{% block content %}
+<h4 class="mb-3">Portal</h4>
+<div class="row g-3">
+  {% if user|has_module:"vendas" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Vendas</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'sales' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if user|has_module:"financeiro" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Financeiro</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'finance' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if user|has_module:"fiscal" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Fiscal</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'fiscal' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if user|has_module:"estoque" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Estoque</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'inventory' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if user|has_module:"funcionario" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Funcionário</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'staff' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if user|has_module:"configuracao" %}
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Configuração</h5>
+        <p class="card-text">Módulo em construção.</p>
+        <a class="btn btn-primary" href="{% url 'config' %}">Abrir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

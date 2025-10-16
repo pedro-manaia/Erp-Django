@@ -1,0 +1,12 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Financeiro — Cadastros</h4>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:expense_category_list' %}">Categoria de Despesa</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:revenue_category_list' %}">Categoria de Receita</a>
+      <a class="list-group-item list-group-item-action" href="{% url 'finance:accounts' %}">Contas Bancárias</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:payment_methods' %}">Formas de Pagamento</a>
+  </div>
+</div>
+{% endblock %}

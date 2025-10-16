@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.venv/
+static/
+media/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+abrir pasta projeto.bat
+*.env
+db.sqlite3
+*.code-workspace
+clean_project.bat

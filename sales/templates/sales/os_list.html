@@ -1,0 +1,23 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<h4 class="mb-3">Ordens de Serviço</h4>
+<div class="alert alert-info">CRUD básico — construção futura.</div>
+<div class="table-responsive bg-white rounded shadow-sm">
+  <table class="table table-sm table-hover align-middle m-0">
+    <thead class="table-light"><tr><th>#</th><th>Título</th><th>Cliente</th><th>Status</th><th>Abertura</th></tr></thead>
+    <tbody>
+      {% for o in object_list %}
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.titulo }}</td>
+        <td>{{ o.cliente }}</td>
+        <td>{{ o.get_status_display }}</td>
+        <td>{{ o.abertura|date:"d/m/Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted py-4">Nenhuma OS</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

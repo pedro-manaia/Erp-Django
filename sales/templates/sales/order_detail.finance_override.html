@@ -1,0 +1,8 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<h4 class="mb-3">Pedido #{{ object.id }}</h4>
+<div class="mb-2">
+  <a class="btn btn-sm btn-success" href="{% url 'finance:cr_from_order' object.id %}">Gerar CR</a>
+</div>
+{% include "sales/_order_detail_core.html" %}
+{% endblock %}

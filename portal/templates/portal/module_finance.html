@@ -1,0 +1,14 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Financeiro</h4>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:cr_list' %}">Contas a Receber</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:cp_list' %}">Contas a Pagar</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:cashbook' %}">Extrato</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'finance:accounts' %}">Contas Bancárias</a>
+  
+    <a class="list-group-item list-group-item-action" href="{% url 'financeiro_cadastro' %}">Cadastro</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="m-0">Orçamentos</h4>
+  <a href="{% url 'sales:quote_new' %}" class="btn btn-primary">Novo orçamento</a>
+</div>
+<div class="table-responsive bg-white rounded shadow-sm">
+  <table class="table table-sm table-hover align-middle m-0">
+    <thead class="table-light">
+      <tr>
+        <th>#</th><th>Cliente</th><th>Status</th><th>Total</th><th>Criado</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in object_list %}
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.cliente }}</td>
+        <td>{{ o.get_status_display }}</td>
+        <td>R$ {{ o.total_liquido }}</td>
+        <td>{{ o.criado_em|date:"d/m/Y H:i" }}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'sales:quote_detail' o.pk %}">Ver</a>
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'sales:quote_edit' o.pk %}">Editar</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Nenhum orçamento</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

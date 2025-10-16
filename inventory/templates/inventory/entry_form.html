@@ -1,0 +1,18 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Nova Entrada</h4>
+  <form method="post">{% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-6">{{ form.produto.label_tag }} {{ form.produto }}</div>
+      <div class="col-md-3">{{ form.quantidade.label_tag }} {{ form.quantidade }}</div>
+      <div class="col-md-3">{{ form.custo_unitario.label_tag }} {{ form.custo_unitario }}</div>
+      <div class="col-12">{{ form.motivo.label_tag }} {{ form.motivo }}</div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary">Salvar</button>
+      <a class="btn btn-secondary" href="{% url 'inventory:entries' %}">Voltar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

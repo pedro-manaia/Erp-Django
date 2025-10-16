@@ -1,0 +1,49 @@
+{% extends "portal/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <div class="mb-3">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cr_list' %}active{% endif %}" href="{% url 'finance:cr_list' %}">Contas a Receber</a></li>
+      <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'cp_list' %}active{% endif %}" href="{% url 'finance:cp_list' %}">Contas a Pagar</a></li>
+    </ul>
+  </div>
+
+  <div class="d-flex align-items-center mb-3"><h4 class="mb-0">{% block title %}{% endblock %}</h4><div class="ms-auto">{% block actions %}{% endblock %}</div></div>
+  <table class="table table-sm table-striped align-middle">
+    {% if request.resolver_match.url_name == "cp_list" %}<thead><tr><th>#</th><th>Categoria</th><th>Descrição</th><th>Vencimento</th><th class="text-end">Valor</th><th>Status</th><th>Ações</th></tr></thead>{% else %}<thead><tr><th>#</th><th>Descrição</th><th>Vencimento</th><th class="text-end">Valor</th><th>Status</th><th>Ações</th></tr></thead>{% endif %}
+    <tbody>
+      {% for l in object_list %}
+      <tr>
+        <td>{{ l.id }}</td>
+        <td>{{ l.descricao }}</td>
+        <td>{{ l.vencimento }}</td>
+        <td class="text-end">R$ {{ l.valor }}</td>
+        <td>
+  {% if l.status_dyn == "paid" %}
+    <span class="badge text-bg-success">Pago</span>
+  {% elif l.status_dyn == "overdue" %}
+    <span class="badge text-bg-danger">Em atraso</span>
+  {% elif l.status_dyn == "due_today" %}
+    <span class="badge text-bg-warning">Vence hoje</span>
+  {% else %}
+    <span class="badge text-bg-secondary">Em aberto</span>
+  {% endif %}
+</td>
+        <td>
+          {% if not l.pago_em %}
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'finance:baixa_parcela_form' l.id %}">Baixar</a>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'finance:ledger_edit' l.id %}">Editar</a>
+          {% else %}
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'finance:ledger_edit' l.id %}">Editar</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-center text-muted">Nenhum lançamento.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

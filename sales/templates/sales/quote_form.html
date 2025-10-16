@@ -1,0 +1,45 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">{{ object|default:'Novo orçamento' }}</h4>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-6">{{ form.cliente.label_tag }}{{ form.cliente }}</div>
+      <div class="col-md-3">{{ form.validade.label_tag }}{{ form.validade }}</div>
+      <div class="col-md-3">{{ form.desconto_total.label_tag }}{{ form.desconto_total }}</div>
+      <div class="col-12">{{ form.observacoes.label_tag }}{{ form.observacoes }}</div>
+      <div class="col-md-3">{{ form.status.label_tag }}{{ form.status }}</div>
+    </div>
+
+    <hr class="my-4">
+    <h5>Itens</h5>
+    {{ formset.management_form }}
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead><tr><th style="width:25%">Produto</th><th>Descrição</th><th style="width:10%">Qtd</th><th style="width:15%">Preço</th><th style="width:1%"></th></tr></thead>
+        <tbody>
+          {% for f in formset %}
+          <tr>
+            <td>{{ f.produto }}</td>
+            <td>{{ f.descricao }}</td>
+            <td>{{ f.quantidade }}</td>
+            <td>{{ f.preco_unitario }}</td>
+            <td>{% if f.instance.pk %}<div class="form-check">{{ f.DELETE }} <label>Excluir</label></div>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      {% if object %}
+      <a class="btn btn-outline-secondary" href="{% url 'sales:quote_detail' object.pk %}">Cancelar</a>
+      {% else %}
+      <a class="btn btn-outline-secondary" href="{% url 'sales:quotes' %}">Cancelar</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+[
+  {"model": "customers.customer", "pk": 1, "fields": {
+    "tipo": "J", "nome": "Cliente Exemplo Ltda", "cpf_cnpj": "12.345.678/0001-99",
+    "email":"contato@exemplo.com","cidade":"São Paulo","uf":"SP","ativo": true
+  }},
+  {"model": "products.product", "pk": 1, "fields": {
+    "sku":"SKU001","nome":"Produto Teste","descricao":"Produto de exemplo",
+    "preco_venda":"99.90","ncm":"00000000","estoque_atual":10,
+    "disponivel_para_locacao": true, "valor_diaria":"15.00","caucao":"50.00","ativo":true
+  }}
+]

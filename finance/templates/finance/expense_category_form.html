@@ -1,0 +1,19 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Nova Categoria de Despesa</h4>
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.name.id_for_label }}">Nome: *</label>
+      {{ form.name }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="{{ form.parent.id_for_label }}">Categoria-pai (opcional)</label>
+      {{ form.parent }}
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{% url 'finance:expense_category_list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

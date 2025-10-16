@@ -1,0 +1,13 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h4 class="mb-3">Financeiro - Health Check</h4>
+  <ul>
+    <li>BASE_DIR: {{ base_dir }}</li>
+    <li>Runtime dir: {{ runtime_dir }}</li>
+    <li>Writable: {% if writable %}<span class="text-success">OK</span>{% else %}<span class="text-danger">NÃO</span>{% endif %}</li>
+    <li>Templates carregados: OK</li>
+    <li>URLs incluídas: OK (você acessou esta página)</li>
+  </ul>
+</div>
+{% endblock %}
